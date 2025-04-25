@@ -61,6 +61,18 @@ def get_all_students():
     students_list = [{'id': student.id, 'name': student.name, 'email': student.email, 'has_paid': student.has_paid} for student in students]
     return jsonify({'students': students_list})
 
+# Récupérer un étudiant par son ID
+@app.route('/student/<int:student_id>', methods=['GET'])
+def get_student(student_id):
+    student = Student.query.get(student_id)
+    if not student:
+        return jsonify({'error': 'Etudiant non trouvé'}), 404
+    return jsonify({
+        'id': student.id,
+        'name': student.name,
+        'email': student.email,
+        'has_paid': student.has_paid
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

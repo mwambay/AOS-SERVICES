@@ -68,4 +68,7 @@ Ce service Flask simple stocke et récupère les notes des étudiants. Il est co
     *   Réponse : `{"message": "Note ajoutée"}`
 *   `GET /get_grades/<student_id>` : Récupère les informations et notes d'un étudiant.
     *   Réponse : `{"name": "...", "grades": [...]}`
-
+    `GET /get_all_grades` : Récupère les informations et notes de tous les étudiants.
+    *   Réponse : `[{"name": "...", "grades": [...]}, ...]`
+*   `GET /student/<student_id>` : Récupère les informations d'un étudiant spécifique.
+    *   Réponse : `{"name": "...", "grades": [...]}`
