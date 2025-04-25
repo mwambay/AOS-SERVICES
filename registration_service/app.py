@@ -43,8 +43,23 @@ def notify_grades_service(student_id):
     student = Student.query.get(student_id)
     if not student:
         return jsonify({'error': 'Etudiant non trouvé'}), 404
-    response = requests.post('http://localhost:5001/init_student', json={'id': student.id, 'name': student.name})
+    try:
+        response = requests.post('https://service-cotes-production.up.railway.app/init_student', json={'id': student.id, 'name': student.name})
+    except requests.exceptions.RequestException as e:
+        response = requests.post('http://localhost:5001/init_student', json={'id': student.id, 'name': student.name})
+        
+    if response.status_code != 200:
+        return jsonify({'error': 'Erreur lors de la notification au service des cotes'}), 500
+    
     return jsonify({'status': 'notification envoyée', 'grades_response': response.json()})
+
+# Récupérer tous les étudiants inscrits
+@app.route('/students', methods=['GET'])
+def get_all_students():
+    students = Student.query.all()
+    students_list = [{'id': student.id, 'name': student.name, 'email': student.email, 'has_paid': student.has_paid} for student in students]
+    return jsonify({'students': students_list})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
