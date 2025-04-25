@@ -25,6 +25,7 @@ def register():
     new_student = Student(name=data['name'], email=data['email'])
     db.session.add(new_student)
     db.session.commit()
+    notify_grades_service(new_student.id)  # Appel à la notification du service des cotes
     return jsonify({'message': 'Etudiant enregistré avec succès', 'id': new_student.id}), 201
 
 # Confirmation du paiement
